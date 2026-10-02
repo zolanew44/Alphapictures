@@ -64,16 +64,16 @@ To edit text:
 5. Save the file (Ctrl + S) and refresh your browser (F5) to see the changes.
 
 Key sections marked for editing:
-- Lead Photographer Bio (Mati):
+- Lead Photographer Bio (Ermi):
   Search for: "Meet Our Lead Photographer"
   You can edit the quote, years of experience, or specialties.
 
 - The Three Photographers Grid:
   Search for: "<!-- EDIT: to show 3 photographers"
   Under this comment, you will find cards for:
-  - Mati (Lead Photographer & Founder)
-  - Wabi (Creative & Event Photographer)
-  - Ermi (Studio & Portrait Specialist)
+  - Ermi (Lead Photographer & Founder)
+  - Mati (Creative & Event Photographer)
+  - Wabi (Studio & Portrait Specialist)
   You can edit names, titles, descriptions, or change their portrait images.
 
 - Studio Sanctuary / Facilities:
