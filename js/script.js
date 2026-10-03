@@ -591,6 +591,60 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   /* ============================================================================
+     1B. PHOTOGRAPHERS DATASET CONFIGURATION
+     ============================================================================ */
+  const PHOTOGRAPHERS = {
+    ermi: {
+      name: 'Ermi',
+      role: 'Lead Photographer & Founder',
+      bio: "Ermi is the founder of Alpha Pictures. With over 12 years behind the lens, Ermi leads every wedding and major event with a refined editorial eye — capturing Ethiopia's most beautiful moments with timeless elegance and cultural depth.",
+      portrait: 'images/portfolio/photographer%203.png',
+      gallery: [
+        'images/portfolio/weddings/jpeg%20(1).jpeg',
+        'images/portfolio/weddings/jpeg%20(2).jpeg',
+        'images/portfolio/weddings/jpeg%20(3).jpeg',
+        'images/portfolio/weddings/jpeg%20(5).jpeg',
+        'images/portfolio/weddings/jpeg%20(7).jpeg',
+        'images/portfolio/events/jpeg%20(1).jpeg',
+        'images/portfolio/events/jpeg%20(3).jpeg',
+        'images/portfolio/events/jpeg%20(5).jpeg'
+      ]
+    },
+    mati: {
+      name: 'Mati',
+      role: 'Creative & Event Photographer',
+      bio: 'Mati captures emotion in motion — from reception dance floors to grand cultural ceremonies — with a creative, cinematic style that feels alive and full of energy.',
+      portrait: 'images/portfolio/photographer%201.png',
+      gallery: [
+        'images/portfolio/events/jpeg%20(2).jpeg',
+        'images/portfolio/events/jpeg%20(4).jpeg',
+        'images/portfolio/events/jpeg%20(6).jpeg',
+        'images/portfolio/events/jpeg%20(8).jpeg',
+        'images/portfolio/engagements/jpeg%20(10).jpeg',
+        'images/portfolio/engagements/jpeg%20(11).jpeg',
+        'images/portfolio/engagements/jpeg%20(17).jpeg',
+        'images/portfolio/weddings/jpeg%20(12).jpeg'
+      ]
+    },
+    wabi: {
+      name: 'Wabi',
+      role: 'Studio & Portrait Specialist',
+      bio: 'Wabi creates relaxed, flattering portraits for families, newborns, graduates, and studio sessions — with warm lighting and genuine smiles.',
+      portrait: 'images/portfolio/photographer%202.png',
+      gallery: [
+        'images/portfolio/portraits/jpeg%20(1).jpeg',
+        'images/portfolio/portraits/jpeg%20(2).jpeg',
+        'images/portfolio/portraits/jpeg%20(5).jpeg',
+        'images/portfolio/graduations/jpeg%20(1).jpeg',
+        'images/portfolio/graduations/jpeg%20(3).jpeg',
+        'images/portfolio/birthdays/jpeg%20(1).jpeg',
+        'images/portfolio/family/jpeg%20(1).jpeg',
+        'images/portfolio/studio/jpeg%20(3).jpeg'
+      ]
+    }
+  };
+
+  /* ============================================================================
      2. DOM ELEMENTS
      ============================================================================ */
   const header = document.getElementById('header');
@@ -616,6 +670,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxNextBtn = document.getElementById('lightboxNextBtn');
   const lightboxLoader = document.getElementById('lightboxLoader');
 
+  // Photographer Profile Modal
+  const photographerModal = document.getElementById('photographerModal');
+  const photographerModalBackdrop = document.getElementById('photographerModalBackdrop');
+  const photographerModalClose = document.getElementById('photographerModalClose');
+  const photographerModalPrev = document.getElementById('photographerModalPrev');
+  const photographerModalNext = document.getElementById('photographerModalNext');
+  const photographerModalPortrait = document.getElementById('photographerModalPortrait');
+  const photographerModalName = document.getElementById('photographerModalName');
+  const photographerModalRole = document.querySelector('.photographer-modal__role');
+  const photographerModalBio = document.querySelector('.photographer-modal__bio');
+  const photographerModalContact = document.querySelector('.photographer-modal__contact');
+  const photographerModalGallery = document.querySelector('.photographer-modal__gallery');
+  const photographerModalCtaName = document.querySelector('.photographer-modal__cta-name');
+  const photographerModalCtaLink = document.getElementById('photographerModalCtaLink');
+  const photographerCards = document.querySelectorAll('.photographer-card');
+
   // Demo Client Gallery
   const portalForm = document.getElementById('portalForm');
   const portalSubmitBtn = document.getElementById('portalSubmitBtn');
@@ -637,6 +707,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLightboxIndex = 0;
   let touchStartX = 0;
   let touchEndX = 0;
+  let currentPhotographerId = null;
+  let lastFocusedCard = null;
+  let previousActiveGalleryItems = null;
+  const PHOTOGRAPHER_KEYS = ['ermi', 'mati', 'wabi'];
 
   /* ============================================================================
      4. PORTFOLIO GALLERY RENDERING
@@ -771,7 +845,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!lightboxModal) return;
     lightboxModal.classList.remove('active');
     lightboxModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    // Maintain hidden body scroll if photographer modal remains open
+    if (photographerModal && photographerModal.classList.contains('is-open')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   }
 
   function updateLightboxContent() {
@@ -824,14 +903,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Keyboard navigation
   window.addEventListener('keydown', (e) => {
-    if (!lightboxModal || !lightboxModal.classList.contains('active')) return;
+    // Lightbox modal takes precedence if active
+    if (lightboxModal && lightboxModal.classList.contains('active')) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        showNextLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        showPrevLightbox();
+      }
+      return;
+    }
 
-    if (e.key === 'Escape') {
-      closeLightbox();
-    } else if (e.key === 'ArrowRight') {
-      showNextLightbox();
-    } else if (e.key === 'ArrowLeft') {
-      showPrevLightbox();
+    // Photographer modal keyboard interactions
+    if (photographerModal && photographerModal.classList.contains('is-open')) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closePhotographerModal();
+      } else if (e.key === 'Tab') {
+        handleModalFocusTrap(e);
+      } else if (e.key === 'ArrowLeft') {
+        navigatePhotographer(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigatePhotographer(1);
+      }
     }
   });
 
@@ -857,6 +954,202 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  /* ============================================================================
+     5B. PHOTOGRAPHER PROFILE MODAL FUNCTIONALITY
+     ============================================================================ */
+  function openPhotographerModal(id, triggerElement = null, setFocus = true) {
+    if (!photographerModal || !PHOTOGRAPHERS[id]) return;
+
+    currentPhotographerId = id;
+    if (triggerElement) {
+      lastFocusedCard = triggerElement;
+    }
+
+    const data = PHOTOGRAPHERS[id];
+
+    // Populate photographer header info
+    if (photographerModalPortrait) {
+      photographerModalPortrait.src = data.portrait;
+      photographerModalPortrait.alt = `${data.name} — ${data.role}`;
+    }
+    if (photographerModalName) {
+      photographerModalName.textContent = data.name;
+    }
+    if (photographerModalRole) {
+      photographerModalRole.textContent = data.role;
+    }
+    if (photographerModalBio) {
+      photographerModalBio.textContent = data.bio;
+    }
+
+    // Populate direct contact links
+    if (photographerModalContact) {
+      photographerModalContact.innerHTML = `
+        <a href="https://t.me/alpha2223" target="_blank" rel="noopener noreferrer" class="photographer-contact-badge" aria-label="Direct Telegram with Alpha Studio">
+          <span>✈️ Telegram: @alpha2223</span>
+        </a>
+        <a href="tel:+251923214406" class="photographer-contact-badge" aria-label="Direct Phone Line">
+          <span>📞 +251 923 214 406</span>
+        </a>
+      `;
+    }
+
+    // Update CTA button text & destination
+    if (photographerModalCtaName) {
+      photographerModalCtaName.textContent = data.name;
+    }
+    if (photographerModalCtaLink) {
+      photographerModalCtaLink.href = 'https://t.me/alpha2223';
+    }
+
+    // Populate selected work gallery
+    if (photographerModalGallery) {
+      photographerModalGallery.innerHTML = '';
+      data.gallery.forEach((imgUrl, idx) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgUrl;
+        thumb.alt = `${data.name} selected work photo ${idx + 1}`;
+        thumb.loading = 'lazy';
+        thumb.setAttribute('tabindex', '0');
+        thumb.setAttribute('role', 'button');
+        thumb.setAttribute('aria-label', `View ${data.name}'s photo ${idx + 1} of ${data.gallery.length} in full screen`);
+
+        // Clicking thumb opens in lightbox
+        const triggerThumbLightbox = () => {
+          if (!previousActiveGalleryItems) {
+            previousActiveGalleryItems = activeGalleryItems;
+          }
+          activeGalleryItems = data.gallery.map((img, i) => ({
+            src: img,
+            fallback: img.replace('images/portfolio/', 'images/profile/'),
+            title: `${data.name} — ${data.role}`,
+            subtitle: `Selected Work · Photo ${i + 1} of ${data.gallery.length}`
+          }));
+          openLightbox(idx);
+        };
+
+        thumb.addEventListener('click', triggerThumbLightbox);
+        thumb.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            triggerThumbLightbox();
+          }
+        });
+
+        photographerModalGallery.appendChild(thumb);
+      });
+    }
+
+    // Open modal with smooth animation
+    photographerModal.removeAttribute('hidden');
+    void photographerModal.offsetWidth; // Force reflow
+    photographerModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+
+    // Focus close button for accessibility
+    if (setFocus && photographerModalClose) {
+      photographerModalClose.focus();
+    }
+  }
+
+  function closePhotographerModal() {
+    if (!photographerModal) return;
+
+    photographerModal.classList.remove('is-open');
+    setTimeout(() => {
+      if (!photographerModal.classList.contains('is-open')) {
+        photographerModal.setAttribute('hidden', '');
+      }
+    }, 300);
+
+    // Only restore body scrolling if lightbox is not active
+    if (!lightboxModal || !lightboxModal.classList.contains('active')) {
+      document.body.style.overflow = '';
+    }
+
+    // Restore portfolio activeGalleryItems
+    if (previousActiveGalleryItems && (!lightboxModal || !lightboxModal.classList.contains('active'))) {
+      activeGalleryItems = previousActiveGalleryItems;
+      previousActiveGalleryItems = null;
+    }
+
+    // Return focus to triggering card
+    if (lastFocusedCard && typeof lastFocusedCard.focus === 'function') {
+      lastFocusedCard.focus();
+    }
+  }
+
+  function navigatePhotographer(direction) {
+    if (!currentPhotographerId) return;
+    const currentIndex = PHOTOGRAPHER_KEYS.indexOf(currentPhotographerId);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + direction + PHOTOGRAPHER_KEYS.length) % PHOTOGRAPHER_KEYS.length;
+    openPhotographerModal(PHOTOGRAPHER_KEYS[nextIndex], null, false);
+  }
+
+  function handleModalFocusTrap(e) {
+    if (!photographerModal || !photographerModal.classList.contains('is-open')) return;
+
+    const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusables = Array.from(photographerModal.querySelectorAll(focusableSelectors))
+      .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0);
+
+    if (focusables.length === 0) return;
+
+    const firstElement = focusables[0];
+    const lastElement = focusables[focusables.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }
+
+  // Photographer Cards Click & Keyboard Listeners
+  if (photographerCards.length > 0) {
+    photographerCards.forEach(card => {
+      const photogId = card.getAttribute('data-photographer');
+      if (!photogId) return;
+
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        openPhotographerModal(photogId, card);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPhotographerModal(photogId, card);
+        }
+      });
+    });
+  }
+
+  // Modal Control Listeners
+  if (photographerModalClose) {
+    photographerModalClose.addEventListener('click', closePhotographerModal);
+  }
+  if (photographerModalBackdrop) {
+    photographerModalBackdrop.addEventListener('click', closePhotographerModal);
+  }
+  if (photographerModalPrev) {
+    photographerModalPrev.addEventListener('click', () => navigatePhotographer(-1));
+  }
+  if (photographerModalNext) {
+    photographerModalNext.addEventListener('click', () => navigatePhotographer(1));
+  }
+
+  // Expose on window for convenience
+  window.openPhotographerModal = openPhotographerModal;
+  window.closePhotographerModal = closePhotographerModal;
 
   /* ============================================================================
      6. PRIVATE CLIENT GALLERY DEMO PORTAL

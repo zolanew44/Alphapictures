@@ -215,7 +215,7 @@
 
         <div class="photographers-team-grid">
           <!-- Photographer 1 (Ermi) -->
-          <div class="team-member-card fade-in">
+          <button type="button" class="team-member-card photographer-card fade-in" data-photographer="ermi" aria-label="Open Ermi's profile" tabindex="0">
             <div class="team-img-wrap">
               <img src="images/portfolio/photographer%203.png" alt="Ermi" class="team-img" loading="lazy">
             </div>
@@ -223,11 +223,12 @@
               <h4 class="team-name">Ermi</h4>
               <p class="team-role">Lead Photographer &amp; Founder</p>
               <p class="team-tagline">Ermi is the founder of Alpha Pictures, leading every wedding and major event with a refined editorial eye and 12+ years of experience capturing Ethiopia's most beautiful moments.</p>
+              <span class="view-profile-cta">View Profile &rarr;</span>
             </div>
-          </div>
+          </button>
 
           <!-- Photographer 2 (Mati) -->
-          <div class="team-member-card fade-in">
+          <button type="button" class="team-member-card photographer-card fade-in" data-photographer="mati" aria-label="Open Mati's profile" tabindex="0">
             <div class="team-img-wrap">
               <img src="images/portfolio/photographer%201.png" alt="Mati" class="team-img" loading="lazy">
             </div>
@@ -235,11 +236,12 @@
               <h4 class="team-name">Mati</h4>
               <p class="team-role">Creative &amp; Event Photographer</p>
               <p class="team-tagline">Mati captures emotion in motion — from reception dance floors to grand cultural ceremonies — with a creative, cinematic style.</p>
+              <span class="view-profile-cta">View Profile &rarr;</span>
             </div>
-          </div>
+          </button>
 
           <!-- Photographer 3 (Wabi) -->
-          <div class="team-member-card fade-in">
+          <button type="button" class="team-member-card photographer-card fade-in" data-photographer="wabi" aria-label="Open Wabi's profile" tabindex="0">
             <div class="team-img-wrap">
               <img src="images/portfolio/photographer%202.png" alt="Wabi" class="team-img" loading="lazy">
             </div>
@@ -247,8 +249,9 @@
               <h4 class="team-name">Wabi</h4>
               <p class="team-role">Studio &amp; Portrait Specialist</p>
               <p class="team-tagline">Wabi creates relaxed, flattering portraits for families, newborns, graduates, and studio sessions.</p>
+              <span class="view-profile-cta">View Profile &rarr;</span>
             </div>
-          </div>
+          </button>
         </div>
 
       </div>
@@ -585,6 +588,41 @@
       </div>
     </section>
   </main>
+
+  <!-- ========================================================
+       8B. PHOTOGRAPHER PROFILE MODAL
+       ======================================================== -->
+  <div id="photographerModal" class="photographer-modal" hidden>
+    <div class="photographer-modal__backdrop" id="photographerModalBackdrop"></div>
+    <div class="photographer-modal__panel" role="dialog" aria-modal="true" aria-labelledby="photographerModalName">
+      <div class="photographer-modal__nav" aria-label="Switch photographer">
+        <button type="button" class="photographer-modal__nav-btn photographer-modal__prev" id="photographerModalPrev" aria-label="Previous Photographer">&#10094;</button>
+        <button type="button" class="photographer-modal__nav-btn photographer-modal__next" id="photographerModalNext" aria-label="Next Photographer">&#10095;</button>
+      </div>
+      <button type="button" class="photographer-modal__close" id="photographerModalClose" aria-label="Close">&times;</button>
+
+      <div class="photographer-modal__header">
+        <img class="photographer-modal__portrait" id="photographerModalPortrait" src="" alt="">
+        <div class="photographer-modal__meta">
+          <h2 class="photographer-modal__name" id="photographerModalName"></h2>
+          <p class="photographer-modal__role" id="photographerModalRole"></p>
+          <p class="photographer-modal__bio" id="photographerModalBio"></p>
+          <div class="photographer-modal__contact" id="photographerModalContact">
+            <!-- Telegram / phone links injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <h3 class="photographer-modal__gallery-title">Selected Work</h3>
+      <div class="photographer-modal__gallery" id="photographerModalGallery"></div>
+
+      <div class="photographer-modal__cta">
+        <a class="btn btn-primary" id="photographerModalCtaLink" href="https://t.me/alpha2223" target="_blank" rel="noopener noreferrer">
+          Book a Session with <span class="photographer-modal__cta-name" id="photographerModalCtaName"></span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================
        9. LIGHTBOX MODAL
