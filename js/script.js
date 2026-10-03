@@ -1348,7 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (date) tgMessage += `📅 Date: ${date}\n`;
       if (message) tgMessage += `📝 Notes/Vision:\n${message}\n`;
       tgMessage += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-      tgMessage += `Sent from Alpha Pictures Portfolio Website`;
+      tgMessage += `Sent from Alpha Pictures Profile Website`;
 
       const telegramUrl = 'https://t.me/alpha2223';
 
