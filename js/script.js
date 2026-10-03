@@ -14,7 +14,21 @@
  *   8. Mobile Navigation Drawer Controller
  *   9. Intersection Observer Scroll Fade-In Animations
  * ==============================================================================
+/**
+ * Initialize Hero Lottie Animation
  */
+document.addEventListener('DOMContentLoaded', function () {
+  var container = document.getElementById('hero-lottie');
+  if (!container || typeof lottie === 'undefined') return;
+
+  lottie.loadAnimation({
+    container: container,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'animations/spiral.json'
+  });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
