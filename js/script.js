@@ -743,17 +743,61 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================================
      4. PORTFOLIO GALLERY RENDERING
      ============================================================================ */
-  function renderPortfolio(filterCategory = 'all') {
-    if (!portfolioGrid) return;
+  function applyFilter(category) {
+    var items = Array.prototype.slice.call(
+      document.querySelectorAll('.portfolio-item')
+    );
 
-    portfolioGrid.innerHTML = '';
-    
-    // Filter dataset
-    const filteredItems = filterCategory === 'all' 
-      ? PORTFOLIO_DATA 
-      : PORTFOLIO_DATA.filter(item => item.category === filterCategory);
+    // Step 1 — FIRST: record current positions
+    var first = new Map();
+    items.forEach(function (el) {
+      first.set(el, el.getBoundingClientRect());
+    });
 
-    // Update active lightbox list
+    // Step 2 — apply the new visibility
+    items.forEach(function (el) {
+      var match = (category === 'all') ||
+                  el.classList.contains('cat-' + category) ||
+                  el.getAttribute('data-category') === category;
+      el.style.display = match ? '' : 'none';
+    });
+
+    // Step 3 — LAST: measure new positions of the still-visible items
+    var last = new Map();
+    items.forEach(function (el) {
+      if (el.style.display !== 'none') {
+        last.set(el, el.getBoundingClientRect());
+      }
+    });
+
+    // Step 4 — INVERT + PLAY: animate each item from old to new
+    last.forEach(function (newRect, el) {
+      var oldRect = first.get(el);
+      if (!oldRect) return;
+      var dx = oldRect.left - newRect.left;
+      var dy = oldRect.top - newRect.top;
+      if (!dx && !dy) return;
+
+      el.style.transition = 'none';
+      el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      requestAnimationFrame(function () {
+        el.style.transition =
+          'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease';
+        el.style.transform = '';
+      });
+    });
+
+    // Fade in newly-revealed items
+    items.forEach(function (el) {
+      if (el.style.display !== 'none') {
+        el.style.opacity = '1';
+      }
+    });
+
+    // Update active lightbox list for the selected filter
+    const filteredItems = category === 'all'
+      ? PORTFOLIO_DATA
+      : PORTFOLIO_DATA.filter(item => item.category === category);
     activeGalleryItems = filteredItems.map(item => ({
       src: item.primaryPath,
       fallback: item.fallbackPath,
@@ -762,14 +806,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
     if (portfolioCountText) {
-      const catName = filterCategory === 'all' ? 'All Works' : filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1);
+      const catName = category === 'all' ? 'All Works' : category.charAt(0).toUpperCase() + category.slice(1);
       portfolioCountText.textContent = `Displaying ${filteredItems.length} curated masterworks in ${catName}`;
     }
+  }
 
-    // Render items
-    filteredItems.forEach((item, index) => {
+  function renderPortfolio(filterCategory = 'all') {
+    if (!portfolioGrid) return;
+
+    portfolioGrid.innerHTML = '';
+
+    // Render all items into DOM so FLIP filtering operates smoothly
+    PORTFOLIO_DATA.forEach((item, index) => {
       const card = document.createElement('article');
-      card.className = 'portfolio-item reveal';
+      card.className = `portfolio-item cat-${item.category} reveal is-visible`;
       card.setAttribute('data-category', item.category);
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
@@ -832,9 +882,24 @@ document.addEventListener('DOMContentLoaded', () => {
       portfolioGrid.appendChild(card);
     });
 
+    if (filterCategory !== 'all') {
+      applyFilter(filterCategory);
+    } else {
+      activeGalleryItems = PORTFOLIO_DATA.map(item => ({
+        src: item.primaryPath,
+        fallback: item.fallbackPath,
+        title: item.title,
+        subtitle: `${item.categoryLabel} · ${item.subtitle}`
+      }));
+      if (portfolioCountText) {
+        portfolioCountText.textContent = `Displaying ${PORTFOLIO_DATA.length} curated masterworks in All Works`;
+      }
+    }
+
     if (window.bindPortfolioClicks) window.bindPortfolioClicks();
     if (window.bindCursorPhotos) window.bindCursorPhotos();
     if (window.observeScrollReveals) window.observeScrollReveals();
+    if (window.initPortfolioTilt) window.initPortfolioTilt();
   }
 
   // Filter Buttons Handling
@@ -843,13 +908,16 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', () => {
         filterButtons.forEach(b => {
           b.classList.remove('active');
+          b.classList.remove('is-active');
           b.setAttribute('aria-selected', 'false');
         });
         btn.classList.add('active');
+        btn.classList.add('is-active');
         btn.setAttribute('aria-selected', 'true');
         
         currentFilter = btn.getAttribute('data-filter') || 'all';
-        renderPortfolio(currentFilter);
+        applyFilter(currentFilter);
+        if (window.updateFilterPill) window.updateFilterPill(btn);
       });
     });
   }
@@ -863,6 +931,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const correspondingBtn = document.querySelector(`.filter-btn[data-filter="${targetFilter}"]`);
         if (correspondingBtn) {
           correspondingBtn.click();
+        } else {
+          applyFilter(targetFilter);
         }
       }
     });
@@ -1237,6 +1307,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const sessionTypeSelect = document.getElementById('sessionType');
+  if (sessionTypeSelect) {
+    sessionTypeSelect.addEventListener('change', function () {
+      if (this.value) {
+        this.removeAttribute('data-empty');
+      } else {
+        this.setAttribute('data-empty', 'true');
+      }
+    });
+  }
+
   if (bookingForm) {
     bookingForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -1594,3 +1675,106 @@ document.addEventListener('DOMContentLoaded', () => {
   bindCursorPhotos();
   window.bindCursorPhotos = bindCursorPhotos;
 })();
+
+// ── Filter Pill Slide ───────────────────────
+(function () {
+  var filter = document.querySelector('.portfolio-filter');
+  if (!filter) return;
+  var pill = filter.querySelector('.filter__pill');
+  var buttons = Array.prototype.slice.call(filter.querySelectorAll('button'));
+  if (!pill || !buttons.length) return;
+
+  function movePillTo(btn) {
+    var fr = filter.getBoundingClientRect();
+    var br = btn.getBoundingClientRect();
+    pill.style.left = (br.left - fr.left) + 'px';
+    pill.style.width = br.width + 'px';
+  }
+
+  function setActive(btn) {
+    buttons.forEach(function (b) {
+      b.classList.remove('is-active');
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('is-active');
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    movePillTo(btn);
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () { setActive(btn); });
+  });
+
+  var initial = filter.querySelector('button.is-active') || filter.querySelector('button.active') || buttons[0];
+  if (initial) {
+    // Wait for fonts to settle, then place the pill
+    setTimeout(function () { setActive(initial); }, 50);
+    window.addEventListener('resize', function () {
+      var current = filter.querySelector('button.is-active') || filter.querySelector('button.active') || initial;
+      movePillTo(current);
+    });
+  }
+
+  window.updateFilterPill = function (btn) {
+    if (btn) setActive(btn);
+  };
+})();
+
+// ── Portfolio Tilt ──────────────────────────
+(function () {
+  if (window.matchMedia('(hover: none)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function initPortfolioTilt() {
+    var items = document.querySelectorAll('.portfolio-item');
+    if (!items.length) return;
+
+    var MAX = 4; // degrees
+
+    items.forEach(function (item) {
+      if (item.dataset.tiltBound) return;
+      item.dataset.tiltBound = 'true';
+      var img = item.querySelector('img') || item;
+      item.addEventListener('mousemove', function (e) {
+        var r = item.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;   // 0..1
+        var py = (e.clientY - r.top) / r.height;   // 0..1
+        var ry = (px - 0.5) * (MAX * 2);           // rotateY
+        var rx = (0.5 - py) * (MAX * 2);           // rotateX
+        img.style.transform =
+          'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(1.03)';
+      });
+      item.addEventListener('mouseleave', function () {
+        img.style.transform = '';
+      });
+    });
+  }
+
+  initPortfolioTilt();
+  window.initPortfolioTilt = initPortfolioTilt;
+})();
+
+// ── Footer Reveal ───────────────────────────
+(function () {
+  var footer = document.querySelector('.site-footer, footer');
+  if (!footer) return;
+
+  if (!('IntersectionObserver' in window)) {
+    footer.classList.add('is-visible');
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  io.observe(footer);
+})();
+

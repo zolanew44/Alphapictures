@@ -76,10 +76,8 @@
       <!-- Header Action & Mobile Toggle -->
       <div class="header-actions">
         <a href="#book" class="btn btn-outline-gold header-cta">Book a Session</a>
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+        <button class="hamburger-btn nav-toggle" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
@@ -115,8 +113,17 @@
           <span>HAUTE PHOTOGRAPHY & ART DIRECTION</span>
           <span class="gold-sparkle">✦</span>
         </div>
-        <h1 class="hero-title">ALPHA PICTURES</h1>
-        <p class="hero-tagline">Timeless Photography · Addis Ababa</p>
+        <h1 class="hero-title hero__title">
+          <span class="word">ALPHA</span>
+          <span class="word">PICTURES</span>
+        </h1>
+        <p class="hero-tagline hero__tagline">
+          <span class="word">Timeless</span>
+          <span class="word">Photography</span>
+          <span class="word">·</span>
+          <span class="word">Addis</span>
+          <span class="word">Ababa</span>
+        </p>
         <p class="hero-description">
           Capturing the spirit, majesty, and intimacy of life’s landmark celebrations — from imperial royal weddings and traditional cultural ceremonies to haute editorial portraits.
         </p>
@@ -344,8 +351,9 @@
         </div>
 
         <!-- Filter Controls -->
-        <div class="portfolio-filters" id="portfolioFilters" role="tablist" aria-label="Profile Categories">
-          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Works</button>
+        <div class="portfolio-filters portfolio-filter" id="portfolioFilters" role="tablist" aria-label="Profile Categories">
+          <span class="filter__pill" aria-hidden="true"></span>
+          <button class="filter-btn active is-active" data-filter="all" role="tab" aria-selected="true">All Works</button>
           <button class="filter-btn" data-filter="weddings" role="tab" aria-selected="false">Weddings</button>
           <button class="filter-btn" data-filter="engagements" role="tab" aria-selected="false">Engagements</button>
           <button class="filter-btn" data-filter="birthdays" role="tab" aria-selected="false">Birthdays</button>
@@ -379,7 +387,7 @@
             </svg>
           </div>
           <p class="eyebrow-text text-gold">EXCLUSIVE CLIENT PORTAL</p>
-          <h2 class="portal-title reveal">Private Client Gallery — Demo</h2>
+          <h2 class="portal-title section-title reveal">Private Client Gallery — Demo</h2>
           <div class="gold-hairline"></div>
           <p class="portal-description reveal">
             Client galleries are private and protected. Enter the unique access code from your private QR card or booking invitation to inspect your proof collection.
@@ -459,27 +467,26 @@
               <p class="form-subheading">Submit your details below to instantly connect with our booking team directly via Telegram.</p>
 
               <form class="booking-form" id="bookingForm">
-                <div class="form-group">
-                  <label for="clientName">Full Name <span class="required">*</span></label>
-                  <input type="text" id="clientName" name="clientName" class="form-control" placeholder="e.g. Almaz Tadesse" required>
+                <div class="form-field">
+                  <input type="text" id="clientName" name="clientName" placeholder=" " required>
+                  <label for="clientName">Full Name *</label>
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-half">
-                    <label for="clientPhone">Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="clientPhone" name="clientPhone" class="form-control" placeholder="e.g. +251 923 214 406" required>
+                  <div class="form-field col-half">
+                    <input type="tel" id="clientPhone" name="clientPhone" placeholder=" " required>
+                    <label for="clientPhone">Phone Number *</label>
                   </div>
-                  <div class="form-group col-half">
+                  <div class="form-field col-half">
+                    <input type="email" id="clientEmail" name="clientEmail" placeholder=" ">
                     <label for="clientEmail">Email Address</label>
-                    <input type="email" id="clientEmail" name="clientEmail" class="form-control" placeholder="e.g. almaz@example.com">
                   </div>
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-half">
-                    <label for="sessionType">Session Category <span class="required">*</span></label>
-                    <select id="sessionType" name="sessionType" class="form-control" required>
-                      <option value="" disabled selected>Select Photography Service</option>
+                  <div class="form-field col-half">
+                    <select id="sessionType" name="sessionType" required data-empty="true">
+                      <option value="" disabled selected></option>
                       <option value="Imperial Wedding">Imperial Wedding (Full Day)</option>
                       <option value="Shimgilina / Engagement">Shimgilina / Traditional Engagement</option>
                       <option value="Cultural Event & Buna">Cultural Event &amp; Buna Ceremony</option>
@@ -489,16 +496,17 @@
                       <option value="Studio Fine Art Portrait">Studio Fine Art Portrait</option>
                       <option value="Commercial & Brand">Commercial / Editorial Brand</option>
                     </select>
+                    <label for="sessionType">Session Category *</label>
                   </div>
-                  <div class="form-group col-half">
+                  <div class="form-field col-half">
+                    <input type="date" id="preferredDate" name="preferredDate" placeholder=" ">
                     <label for="preferredDate">Preferred Date</label>
-                    <input type="date" id="preferredDate" name="preferredDate" class="form-control">
                   </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-field">
+                  <textarea id="clientMessage" name="clientMessage" rows="4" placeholder=" "></textarea>
                   <label for="clientMessage">Event Details &amp; Special Requests</label>
-                  <textarea id="clientMessage" name="clientMessage" rows="4" class="form-control" placeholder="Tell us about your venue, number of guests, preferred location, or special vision..."></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-gold btn-block" id="bookingSubmitBtn">

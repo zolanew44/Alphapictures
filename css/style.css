@@ -1735,18 +1735,7 @@ a.item-value:hover {
 }
 
 .floating-telegram-btn::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 2px solid #229ED9;
-  opacity: 0.6;
-  animation: pulseTelegram 2s infinite ease-out;
-}
-
-@keyframes pulseTelegram {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(1.4); opacity: 0; }
+  display: none;
 }
 
 .floating-telegram-btn:hover {
@@ -2348,3 +2337,439 @@ body.preloader-active { overflow: hidden; }
   .portfolio figure img,
   [data-gallery] img { cursor: pointer; }
 }
+
+/* ========================================================
+   16. COORDINATED UI ANIMATIONS & MICRO-INTERACTIONS
+   ======================================================== */
+
+/* ── Feature A1: Button Hover Lift + Gold Glow ── */
+.btn, .btn-primary, .btn-secondary, .cta {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.35s ease,
+    letter-spacing 0.35s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
+  will-change: transform, box-shadow;
+}
+.btn:hover, .btn-primary:hover,
+.btn-secondary:hover, .cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 24px rgba(212, 175, 55, 0.35),
+    0 0 0 1px rgba(212, 175, 55, 0.6);
+  letter-spacing: 0.13em;
+}
+.btn:active, .btn-primary:active,
+.btn-secondary:active, .cta:active {
+  transform: translateY(0);
+  box-shadow:
+    0 4px 12px rgba(212, 175, 55, 0.25),
+    0 0 0 1px rgba(212, 175, 55, 0.5);
+}
+
+/* ── Feature A2: Nav Link Underline Slide ── */
+.nav a, header nav a, .main-nav a, .nav-link {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  padding-bottom: 4px;
+  transition: color 0.25s ease;
+}
+.nav a::after, header nav a::after, .main-nav a::after, .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: #d4af37;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav a:hover::after, header nav a:hover::after, .main-nav a:hover::after, .nav-link:hover::after,
+.nav a:focus-visible::after, header nav a:focus-visible::after, .main-nav a:focus-visible::after, .nav-link:focus-visible::after,
+.nav a.is-active::after, header nav a.is-active::after, .main-nav a.is-active::after, .nav-link.is-active::after,
+.nav a.active::after, header nav a.active::after, .main-nav a.active::after, .nav-link.active::after {
+  transform: scaleX(1);
+}
+.nav a:hover, header nav a:hover, .main-nav a:hover, .nav-link:hover,
+.nav a:focus-visible, header nav a:focus-visible, .main-nav a:focus-visible, .nav-link:focus-visible,
+.nav a.is-active, header nav a.is-active, .main-nav a.is-active, .nav-link.is-active,
+.nav a.active, header nav a.active, .main-nav a.active, .nav-link.active {
+  color: #d4af37;
+}
+
+/* ── Feature A3: Portfolio Filter Pill Slide ── */
+.portfolio-filter {
+  position: relative;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 999px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.portfolio-filter::-webkit-scrollbar {
+  display: none;
+}
+.portfolio-filter button {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  color: #f9f8f5;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+.portfolio-filter button.is-active,
+.portfolio-filter button.active {
+  color: #0a0a0a !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+.filter__pill {
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: 0;
+  width: 0;
+  background: linear-gradient(135deg, #d4af37, #f0e636);
+  border-radius: 999px;
+  z-index: 0;
+  transition:
+    left 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* ── Feature A4: Input Field Gold Focus + Label Float ── */
+.form-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.form-field.col-half {
+  flex: 1;
+  margin-bottom: 0;
+}
+.booking-form .form-row {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(249, 248, 245, 0.3);
+  color: #f9f8f5;
+  padding: 1.1rem 0 0.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-shadow: none;
+}
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  border-bottom-color: #d4af37;
+  background: transparent;
+  box-shadow: none;
+}
+.form-field select option {
+  background-color: #121212;
+  color: #f9f8f5;
+}
+.form-field label {
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  color: rgba(249, 248, 245, 0.55);
+  font-size: 1rem;
+  pointer-events: none;
+  transition:
+    top 0.25s ease,
+    font-size 0.25s ease,
+    color 0.25s ease,
+    letter-spacing 0.25s ease;
+  margin-bottom: 0;
+}
+.form-field input:focus + label,
+.form-field input:not(:placeholder-shown) + label,
+.form-field textarea:focus + label,
+.form-field textarea:not(:placeholder-shown) + label,
+.form-field select:focus + label,
+.form-field select:not([data-empty="true"]) + label {
+  top: 0;
+  font-size: 0.75rem;
+  color: #d4af37;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+/* Animated gold underline */
+.form-field::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, #d4af37, #f0e636);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.form-field:focus-within::after {
+  transform: scaleX(1);
+}
+.form-field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(50%) saturate(1000%) hue-rotate(5deg);
+  cursor: pointer;
+}
+
+/* ── Feature A5: Hamburger Menu Morph to X ── */
+.nav-toggle {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  z-index: 1001;
+}
+@media (max-width: 1024px) {
+  .nav-toggle {
+    display: inline-flex;
+  }
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #d4af37;
+  border-radius: 2px;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
+  transform-origin: center;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1),
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2),
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3),
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ── Feature A6: Telegram Button Gentle Pulse ── */
+.floating-telegram-btn {
+  position: fixed;
+  animation: telegram-pulse 4s ease-in-out infinite;
+}
+@keyframes telegram-pulse {
+  0%, 100% {
+    box-shadow:
+      0 6px 20px rgba(34, 158, 217, 0.5),
+      0 0 0 0 rgba(34, 158, 217, 0.55);
+  }
+  60% {
+    box-shadow:
+      0 6px 20px rgba(34, 158, 217, 0.5),
+      0 0 0 16px rgba(34, 158, 217, 0);
+  }
+}
+
+/* ── Feature A7: Photo Card Subtle Tilt on Hover ── */
+.portfolio-item {
+  perspective: 800px;
+  transition: transform 0.35s ease;
+}
+.portfolio-item img {
+  transition: transform 0.35s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ── Feature A8: Section Heading Gold Bar Draw ── */
+.section-title {
+  position: relative;
+  padding-bottom: 1rem;
+}
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 80px;
+  background: linear-gradient(90deg, #d4af37, #f0e636);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+.text-center .section-title::after,
+.section-header.text-center .section-title::after {
+  left: calc(50% - 40px);
+}
+.section-title.is-visible::after {
+  transform: scaleX(1);
+}
+.gold-hairline {
+  display: none;
+}
+
+/* ── Feature B1: Hero Text Word-by-Word Fade-In ── */
+.hero__title .word,
+.hero-title .word,
+.hero__tagline .word,
+.hero-tagline .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+body.site-ready .hero__title .word,
+body.site-ready .hero-title .word,
+body.site-ready .hero__tagline .word,
+body.site-ready .hero-tagline .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+body.site-ready .hero__title .word:nth-child(1),
+body.site-ready .hero-title .word:nth-child(1) { transition-delay: 0.10s; }
+body.site-ready .hero__title .word:nth-child(2),
+body.site-ready .hero-title .word:nth-child(2) { transition-delay: 0.25s; }
+
+body.site-ready .hero__tagline .word:nth-child(1),
+body.site-ready .hero-tagline .word:nth-child(1) { transition-delay: 0.40s; }
+body.site-ready .hero__tagline .word:nth-child(2),
+body.site-ready .hero-tagline .word:nth-child(2) { transition-delay: 0.50s; }
+body.site-ready .hero__tagline .word:nth-child(3),
+body.site-ready .hero-tagline .word:nth-child(3) { transition-delay: 0.60s; }
+body.site-ready .hero__tagline .word:nth-child(4),
+body.site-ready .hero-tagline .word:nth-child(4) { transition-delay: 0.70s; }
+body.site-ready .hero__tagline .word:nth-child(5),
+body.site-ready .hero-tagline .word:nth-child(5) { transition-delay: 0.80s; }
+
+/* ── Feature B3: Footer Reveal on Scroll ── */
+.site-footer {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-footer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.site-footer > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-footer.is-visible > *:nth-child(1) { transition-delay: 0.10s; opacity: 1; transform: none; }
+.site-footer.is-visible > *:nth-child(2) { transition-delay: 0.20s; opacity: 1; transform: none; }
+.site-footer.is-visible > *:nth-child(3) { transition-delay: 0.30s; opacity: 1; transform: none; }
+.site-footer.is-visible > *:nth-child(4) { transition-delay: 0.40s; opacity: 1; transform: none; }
+
+.site-footer .footer-col {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-footer.is-visible .footer-col:nth-child(1) { transition-delay: 0.15s; opacity: 1; transform: none; }
+.site-footer.is-visible .footer-col:nth-child(2) { transition-delay: 0.25s; opacity: 1; transform: none; }
+.site-footer.is-visible .footer-col:nth-child(3) { transition-delay: 0.35s; opacity: 1; transform: none; }
+.site-footer.is-visible .footer-col:nth-child(4) { transition-delay: 0.45s; opacity: 1; transform: none; }
+
+/* ── Reduced Motion Overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn-primary, .btn-secondary, .cta {
+    transform: none !important;
+    transition: none !important;
+  }
+  .nav a::after, header nav a::after, .main-nav a::after, .nav-link::after {
+    transition: none !important;
+    transform: scaleX(1) !important;
+  }
+  .filter__pill {
+    transition: none !important;
+  }
+  .form-field::after,
+  .form-field label {
+    transition: none !important;
+  }
+  .nav-toggle span {
+    transition: none !important;
+  }
+  .floating-telegram-btn {
+    animation: none !important;
+  }
+  .portfolio-item,
+  .portfolio-item img {
+    transition: none !important;
+    transform: none !important;
+  }
+  .section-title::after {
+    transition: none !important;
+    transform: scaleX(1) !important;
+  }
+  .hero__title .word,
+  .hero-title .word,
+  .hero__tagline .word,
+  .hero-tagline .word {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .site-footer,
+  .site-footer.is-visible,
+  .site-footer > *,
+  .site-footer.is-visible > *,
+  .site-footer .footer-col,
+  .site-footer.is-visible .footer-col {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Mobile Form Row Adjustment (< 600px) ── */
+@media (max-width: 600px) {
+  .booking-form .form-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .form-field.col-half {
+    margin-bottom: 0;
+  }
+}
+
