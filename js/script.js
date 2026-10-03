@@ -597,6 +597,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ermi: {
       name: 'Ermi',
       role: 'Lead Photographer & Founder',
+      phone: '+251 923 214 406',
+      phoneRaw: '+251923214406',
       bio: "Ermi is the founder of Alpha Pictures. With over 12 years behind the lens, Ermi leads every wedding and major event with a refined editorial eye — capturing Ethiopia's most beautiful moments with timeless elegance and cultural depth.",
       portrait: 'images/portfolio/photographer%203.png',
       gallery: [
@@ -613,6 +615,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mati: {
       name: 'Mati',
       role: 'Creative & Event Photographer',
+      phone: '+251 913 851 893',
+      phoneRaw: '+251913851893',
       bio: 'Mati captures emotion in motion — from reception dance floors to grand cultural ceremonies — with a creative, cinematic style that feels alive and full of energy.',
       portrait: 'images/portfolio/photographer%201.png',
       gallery: [
@@ -629,6 +633,8 @@ document.addEventListener('DOMContentLoaded', () => {
     wabi: {
       name: 'Wabi',
       role: 'Studio & Portrait Specialist',
+      phone: '+251 922 576 132',
+      phoneRaw: '+251922576132',
       bio: 'Wabi creates relaxed, flattering portraits for families, newborns, graduates, and studio sessions — with warm lighting and genuine smiles.',
       portrait: 'images/portfolio/photographer%202.png',
       gallery: [
@@ -983,24 +989,29 @@ document.addEventListener('DOMContentLoaded', () => {
       photographerModalBio.textContent = data.bio;
     }
 
-    // Populate direct contact links
-    if (photographerModalContact) {
-      photographerModalContact.innerHTML = `
-        <a href="https://t.me/alpha2223" target="_blank" rel="noopener noreferrer" class="photographer-contact-badge" aria-label="Direct Telegram with Alpha Studio">
-          <span>✈️ Telegram: @alpha2223</span>
-        </a>
-        <a href="tel:+251923214406" class="photographer-contact-badge" aria-label="Direct Phone Line">
-          <span>📞 +251 923 214 406</span>
-        </a>
-      `;
+    // Update direct phone pill in contact block
+    const modalPhone = photographerModal.querySelector('.photographer-modal__phone');
+    const modalPhoneNumber = photographerModal.querySelector('.photographer-modal__phone-number');
+    if (modalPhone) {
+      modalPhone.href = 'tel:' + data.phoneRaw;
+      modalPhone.setAttribute('aria-label', `Call ${data.name} directly at ${data.phone}`);
+    }
+    if (modalPhoneNumber) {
+      modalPhoneNumber.textContent = data.phone;
     }
 
-    // Update CTA button text & destination
+    // Update CTA button text & destination (still links to Telegram)
     if (photographerModalCtaName) {
       photographerModalCtaName.textContent = data.name;
     }
     if (photographerModalCtaLink) {
       photographerModalCtaLink.href = 'https://t.me/alpha2223';
+    }
+
+    // Update Call note line under CTA
+    const callNote = document.getElementById('photographerModalCallNote');
+    if (callNote) {
+      callNote.innerHTML = `Or call ${data.name} directly: <a href="tel:${data.phoneRaw}">${data.phone}</a>`;
     }
 
     // Populate selected work gallery
@@ -1120,11 +1131,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!photogId) return;
 
       card.addEventListener('click', (e) => {
+        // If clicking on direct phone link, don't trigger modal
+        if (e.target.closest('.photographer-card__phone')) return;
         e.preventDefault();
         openPhotographerModal(photogId, card);
       });
 
       card.addEventListener('keydown', (e) => {
+        if (e.target.closest('.photographer-card__phone')) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           openPhotographerModal(photogId, card);
@@ -1132,6 +1146,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // Direct Phone Links on Cards (prevent modal open & open dialer)
+  const photographerCardPhoneLinks = document.querySelectorAll('.photographer-card__phone');
+  photographerCardPhoneLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const href = link.getAttribute('href');
+      if (href) {
+        window.location.href = href;
+      }
+    });
+
+    link.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.stopPropagation();
+      }
+    });
+  });
 
   // Modal Control Listeners
   if (photographerModalClose) {

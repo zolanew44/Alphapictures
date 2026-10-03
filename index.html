@@ -224,6 +224,9 @@
               <p class="team-role">Lead Photographer &amp; Founder</p>
               <p class="team-tagline">Ermi is the founder of Alpha Pictures, leading every wedding and major event with a refined editorial eye and 12+ years of experience capturing Ethiopia's most beautiful moments.</p>
               <span class="view-profile-cta">View Profile &rarr;</span>
+              <a class="photographer-card__phone" href="tel:+251923214406">
+                📞 +251 923 214 406
+              </a>
             </div>
           </button>
 
@@ -237,6 +240,9 @@
               <p class="team-role">Creative &amp; Event Photographer</p>
               <p class="team-tagline">Mati captures emotion in motion — from reception dance floors to grand cultural ceremonies — with a creative, cinematic style.</p>
               <span class="view-profile-cta">View Profile &rarr;</span>
+              <a class="photographer-card__phone" href="tel:+251913851893">
+                📞 +251 913 851 893
+              </a>
             </div>
           </button>
 
@@ -250,6 +256,9 @@
               <p class="team-role">Studio &amp; Portrait Specialist</p>
               <p class="team-tagline">Wabi creates relaxed, flattering portraits for families, newborns, graduates, and studio sessions.</p>
               <span class="view-profile-cta">View Profile &rarr;</span>
+              <a class="photographer-card__phone" href="tel:+251922576132">
+                📞 +251 922 576 132
+              </a>
             </div>
           </button>
         </div>
@@ -608,7 +617,16 @@
           <p class="photographer-modal__role" id="photographerModalRole"></p>
           <p class="photographer-modal__bio" id="photographerModalBio"></p>
           <div class="photographer-modal__contact" id="photographerModalContact">
-            <!-- Telegram / phone links injected by JS -->
+            <a class="photographer-modal__phone" id="photographerModalPhone" href="">
+              <svg class="icon-phone" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07
+                         19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1
+                         4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1
+                         -.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1
+                         2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span class="photographer-modal__phone-number" id="photographerModalPhoneNumber"></span>
+            </a>
           </div>
         </div>
       </div>
@@ -620,6 +638,9 @@
         <a class="btn btn-primary" id="photographerModalCtaLink" href="https://t.me/alpha2223" target="_blank" rel="noopener noreferrer">
           Book a Session with <span class="photographer-modal__cta-name" id="photographerModalCtaName"></span>
         </a>
+        <span class="photographer-modal__call-note" id="photographerModalCallNote">
+          Or call <span id="photographerModalCallName"></span> directly: <a id="photographerModalCallLink" href=""></a>
+        </span>
       </div>
     </div>
   </div>

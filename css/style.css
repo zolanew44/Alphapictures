@@ -888,6 +888,20 @@ ul, ol {
   gap: 0.75rem;
 }
 
+.photographer-card__phone {
+  display: inline-block;
+  margin-top: .5rem;
+  color: #d4af37;
+  text-decoration: none;
+  font-size: .9rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.photographer-card__phone:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 /* --------------------------------------------------------
    9. STUDIO SECTION
    -------------------------------------------------------- */
@@ -1584,30 +1598,41 @@ a.item-value:hover {
 
 .photographer-modal__contact {
   display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-top: 1rem;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
 }
 
-.photographer-contact-badge {
+.photographer-modal__phone {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.85rem;
-  font-size: 0.825rem;
-  color: var(--color-gold);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 20px;
-  background: rgba(212, 175, 55, 0.08);
+  gap: .5rem;
+  padding: .55rem 1rem;
+  border: 1px solid #d4af37;
+  border-radius: 999px;
+  color: #d4af37;
   text-decoration: none;
-  transition: all 0.2s ease;
+  font-size: .95rem;
+  letter-spacing: .03em;
+  transition: background .25s ease, color .25s ease;
 }
 
-.photographer-contact-badge:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: var(--color-gold);
-  color: #ffffff;
-  transform: translateY(-2px);
+.photographer-modal__phone:hover,
+.photographer-modal__phone:focus-visible {
+  background: #d4af37;
+  color: #0a0a0a;
+  outline: none;
+}
+
+.photographer-modal__phone .icon-phone {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .photographer-modal__gallery-title {
@@ -1648,6 +1673,18 @@ a.item-value:hover {
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(212, 175, 55, .3);
+}
+
+.photographer-modal__call-note {
+  display: block;
+  margin-top: .75rem;
+  font-size: .9rem;
+  opacity: .75;
+}
+
+.photographer-modal__call-note a {
+  color: #d4af37;
+  text-decoration: underline;
 }
 
 /* --------------------------------------------------------
@@ -2192,5 +2229,20 @@ a.item-value:hover {
 
   .photographer-modal__gallery {
     grid-template-columns: 1fr;
+  }
+
+  .photographer-modal__contact {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .photographer-modal__phone {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .photographer-modal__cta .btn {
+    width: 100%;
   }
 }
