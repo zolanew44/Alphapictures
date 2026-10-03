@@ -29,6 +29,23 @@
 </head>
 <body>
 
+  <!-- Aperture Preloader -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader__stage">
+      <div class="preloader__aperture">
+        <span class="aperture__blade"></span>
+        <span class="aperture__blade"></span>
+        <span class="aperture__blade"></span>
+        <span class="aperture__blade"></span>
+        <span class="aperture__blade"></span>
+        <span class="aperture__blade"></span>
+        <span class="aperture__glow"></span>
+      </div>
+      <div class="preloader__wordmark">ALPHA PICTURES</div>
+      <div class="preloader__tagline">Timeless Photography · Addis Ababa</div>
+    </div>
+  </div>
+
   <!-- ========================================================
        1. STICKY HEADER & NAVIGATION
        ======================================================== -->
@@ -90,17 +107,7 @@
          2. HERO SECTION
          ======================================================== -->
     <section class="hero-section hero" id="hero">
-      <!-- Background Image with dynamic fallback -->
-      <div class="hero-bg" id="heroBg">
-        <picture>
-          <img src="images/portfolio/weddings/jpeg%20(1).jpeg" 
-               onerror="this.onerror=null; this.src='images/profile/weddings/jpeg%20(1).jpeg';" 
-               alt="Alpha Pictures Hero Background" class="hero-img" id="heroImg">
-        </picture>
-        <div class="hero-gradient-overlay"></div>
-      </div>
-
-      <div id="hero-lottie" class="hero-lottie" aria-hidden="true"></div>
+      <img class="hero__bg" src="images/portfolio/weddings/jpeg%20(1).jpeg" onerror="this.onerror=null; this.src='images/profile/weddings/jpeg%20(1).jpeg';" alt="" aria-hidden="true">
 
       <div class="hero-content container">
         <div class="hero-badge">
@@ -785,8 +792,6 @@
     </div>
   </footer>
 
-  <!-- Lottie Player Library -->
-  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
   <!-- Main JavaScript File -->
   <script src="js/script.js"></script>
 </body>

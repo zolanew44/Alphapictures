@@ -1,3 +1,38 @@
+// ── Aperture Preloader ──────────────────────
+(function () {
+  var preloader = document.getElementById('preloader');
+  if (!preloader) return;
+
+  document.body.classList.add('preloader-active');
+
+  var REVEAL_AT = 2200;   // when to start fading out
+  var REMOVE_AT = 3000;   // when to fully remove from DOM
+
+  function hidePreloader() {
+    preloader.classList.add('is-hidden');
+    document.body.classList.remove('preloader-active');
+  }
+
+  function removePreloader() {
+    if (preloader && preloader.parentNode) {
+      preloader.parentNode.removeChild(preloader);
+    }
+  }
+
+  window.addEventListener('load', function () {
+    setTimeout(hidePreloader, REVEAL_AT);
+    setTimeout(removePreloader, REMOVE_AT);
+  });
+
+  // Safety: if load never fires, hide after 4s
+  setTimeout(function () {
+    if (document.body.contains(preloader)) {
+      hidePreloader();
+      removePreloader();
+    }
+  }, 4000);
+})();
+
 /**
  * ==============================================================================
  * ALPHA PICTURES (ALPHA STUDIO) — MASTER JAVASCRIPT
@@ -14,21 +49,7 @@
  *   8. Mobile Navigation Drawer Controller
  *   9. Intersection Observer Scroll Fade-In Animations
  * ==============================================================================
-/**
- * Initialize Hero Lottie Animation
  */
-document.addEventListener('DOMContentLoaded', function () {
-  var container = document.getElementById('hero-lottie');
-  if (!container || typeof lottie === 'undefined') return;
-
-  lottie.loadAnimation({
-    container: container,
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: 'animations/spiral.json'
-  });
-});
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
